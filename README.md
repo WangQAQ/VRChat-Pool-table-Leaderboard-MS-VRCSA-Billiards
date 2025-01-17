@@ -6,7 +6,7 @@
 ### 该桌子的目的是为大家带来一个面向娱乐的桌子,做一些小插件,或者好玩滴功能
 #### [版权表](https://github.com/WangQAQ/VRChat-Pool-table-Leaderboard-MS-VRCSA-Billiards/blob/main/Copyright.md)
 ---
-## 新的功能
+## 1.新的功能
 * ### 上传面板:
 	* #### 无需再向以前一样将绑定的工作放到 Start 函数,当前的绑定再 EditTime 完成,无需更多的性能消耗
 	* #### 简便的上传方式,您可以不必在意如何绑定,只需要再面板上按照顺序点击,即可完成绑定工作
@@ -31,7 +31,7 @@
 	* #### 靠胜率做了个简易的分段,这样可以让大家不止注重分数
 ---
 
-## 我该如何使用它
+## 2.我该如何使用它
 ### 打开 Prefab 文件夹
 #### 放置 snooker&pyramid&cn8&3c&10b (主体台球桌)
 #### 放置 TableHook (replica) 2 (必备插件)
