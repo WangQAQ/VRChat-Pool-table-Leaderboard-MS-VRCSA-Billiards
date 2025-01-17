@@ -5741,8 +5741,8 @@ MonoBehaviour:
   - 0Cusion
   - 10Ball
   WorldGUID: 
-  Key: CheeseIsTheHashKeyForNoReason
-  ScoreUploadBaseURL: https://www.wangqaq.com/AspAPI/table/UploadScore
+  Key: 
+  ScoreUploadBaseURL: https://www.wangqaq.com/AspAPI/table/UploadScore/V2.1
   _cc20: {fileID: 0}
   _scoreManager: {fileID: 0}
   scoreDebugA: 

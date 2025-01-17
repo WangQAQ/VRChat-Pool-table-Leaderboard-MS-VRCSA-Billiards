@@ -128,7 +128,7 @@ namespace WangQAQ.Plug
 			GUILayout.Space(10);
 			
 			/* 是否检查插件 */
-			GUI.enabled = isCheck;
+			GUI.enabled = isCheck && !isUploadKey;
 
 			/* 上传密钥 */
 			GUILayout.Label("2.Upload Key (上传密钥)", new GUIStyle(GUI.skin.label) { fontSize = 15 });
