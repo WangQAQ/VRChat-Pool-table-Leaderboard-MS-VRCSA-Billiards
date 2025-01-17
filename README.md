@@ -74,6 +74,7 @@
 ## 高清大图
 ![1](https://github.com/user-attachments/assets/22d982b4-a50e-420f-8db5-05553483445d)
 ![1](https://github.com/user-attachments/assets/3ab92dda-c7dc-4ab1-94dd-bce85f6809e2)
+![1](https://github.com/user-attachments/assets/90a37503-a4c4-4b7f-936c-17f00c094bec)
 
 ![qrcode_1737098291587](https://github.com/user-attachments/assets/ebbfe76c-75b4-4352-b105-5e02ae20ff09)
 > 时间紧凑，双语版的页面在做了 </br>
