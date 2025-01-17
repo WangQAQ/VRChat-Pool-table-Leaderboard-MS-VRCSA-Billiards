@@ -1,0 +1,52 @@
+<table>
+   <tr>
+      	<td>插件名称</td>
+      	<td>版权信息(大致)</td>
+   </tr>
+	<tr>
+      <td>桌子</td>
+      <td>MS-VRCSA</td>
+   </tr>
+   <tr>
+      <td>计分器</td>
+      <td>WangQAQ</td>
+   </tr>
+  	<tr>
+      <td>新闻板</td>
+      <td>WangQAQ</td>
+  	</tr>
+   <tr>
+      <td>倍率模块</td>
+      <td>WangQAQ</td>
+  	</tr>
+   <tr>
+      <td>地标模块</td>
+      <td>WangQAQ</td>
+   </tr>
+  	<tr>
+      <td>ColorNameV2</td>
+      <td>WangQAQ</td>
+   </tr>
+   <tr>
+      <td>排行榜</td>
+      <td>*(WangQAQ,Cheese)</td>
+   </tr>
+   <tr>
+      <td>ELO</td>
+      <td>*(WangQAQ,Cheese)</td>
+   </tr>
+   <tr>
+      <td>TableHook</td>
+      <td>Cheese</td>
+   </tr>
+   <tr>
+      <td>Translate</td>
+      <td>Cheese</td>
+   </tr>
+   <tr>
+      <td>/Plug中的UI</td>
+      <td>COCO GAME</td>
+   </tr>
+</table>
+
+> *代表多人参与制作
