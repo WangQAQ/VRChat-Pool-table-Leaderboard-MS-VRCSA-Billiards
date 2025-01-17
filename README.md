@@ -1,9 +1,10 @@
 # VRC台球-排行榜-斯诺克
 ## 项目继承表
-* MS-VRCSA-Billiards
-  * VRChat-Pool-table-15-red-snooker-Pyramid-Chinese-8-MS-VRCSA-Billiards
-  	  * #### VRChat-Pool-table-Leaderboard-MS-VRCSA-Billiards (当前)
+* #### MS-VRCSA-Billiards
+  * #### VRChat-Pool-table-15-red-snooker-Pyramid-Chinese-8-MS-VRCSA-Billiards
+  	  * ### VRChat-Pool-table-Leaderboard-MS-VRCSA-Billiards (当前)
 ### 该桌子的目的是为大家带来一个面向娱乐的桌子,做一些小插件,或者好玩滴功能
+
 ---
 ## 新的功能
 * ### 上传面板:
