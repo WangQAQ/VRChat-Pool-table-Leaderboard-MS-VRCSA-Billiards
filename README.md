@@ -5,11 +5,13 @@
   	  * ### VRChat-Pool-table-Leaderboard-MS-VRCSA-Billiards (当前)
 ### 该桌子的目的是为大家带来一个面向娱乐的桌子,做一些小插件,或者好玩滴功能
 #### [版权表](https://github.com/WangQAQ/VRChat-Pool-table-Leaderboard-MS-VRCSA-Billiards/blob/main/Copyright.md)
+
+> 您可以在这里游玩该桌子:[地图](https://vrchat.com/home/world/wrld_d9ac19bc-a8c4-42cd-b712-c66dd813bd8c/info)
 ---
 ## 1.新的功能
 * ### 上传面板:
-	* #### 无需再向以前一样将绑定的工作放到 Start 函数,当前的绑定再 EditTime 完成,无需更多的性能消耗
-	* #### 简便的上传方式,您可以不必在意如何绑定,只需要再面板上按照顺序点击,即可完成绑定工作
+	* #### 无需再向以前一样将绑定的工作放到 Start 函数,当前的绑定在 EditTime 完成,无需更多的性能消耗
+	* #### 简便的上传方式,您可以不必在意如何绑定,只需要在面板上按照顺序点击,即可完成绑定工作
 	* #### 更好的排行榜密钥管理系统,我们注意到大家在使用自动化排行榜时,容易因为一些操作导致丢失密钥,现在我们制作了一个新的用户系统,让您可以绑定您的密钥
 * ### 用户系统:
 	* #### 您可以在[账号](https://www.wangqaq.com/PoolBar/Account)中注册您的账号
@@ -32,11 +34,12 @@
 ---
 
 ## 2.我该如何使用它
-### 打开 Prefab 文件夹
-#### 放置 snooker&pyramid&cn8&3c&10b (主体台球桌)
-#### 放置 TableHook (replica) 2 (必备插件)
-#### 放置 UI-排行榜 (排行榜UI)
-#### 放置 TagPlug (地标主体) (选装插件)
+### 打开 Prefab 文件夹 ( 红色为必选，蓝色为可选 )
+![1](https://github.com/user-attachments/assets/24566164-7c7a-4d29-b29f-d012d887821e)
+* #### 放置 snooker&pyramid&cn8&3c&10b (主体台球桌)
+* #### 放置 TableHook (replica) 2 (必备插件)
+* #### 放置 UI-排行榜 (排行榜UI)
+* #### 放置 TagPlug (地标主体) (选装插件)
 
 ## 然后在上方找到 VRC-VRCSA 
 * ### 先按 Set Up Pool Table Layers
@@ -55,6 +58,8 @@
 ## 特别感谢
 
 ### 特别感谢以下好友对我的帮助(排名不分先后):COCO , 蛋包饭 , 安洁罗塞塔,猪排,埃里吃,等等
+
+![qrcode_1737098291587](https://github.com/user-attachments/assets/ebbfe76c-75b4-4352-b105-5e02ae20ff09)
 
 > 时间紧凑，双语版的页面在做了 </br>
 > Time was tight, and the bilingual version of the page was done
