@@ -54,8 +54,9 @@
 * ### 在[个人主页](https://www.wangqaq.com/PoolBar/Account)中可以做的
 	* #### 里面可以设置您的彩名
 	* #### 里面可以设置您的地标
-	* #### 若您想要使用设置完成的彩名的话,需要先绑定用户,前往[地图](https://vrchat.com/home/world/wrld_d9ac19bc-a8c4-42cd-b712-c66dd813bd8c/info)找到User Code System 复制里面的用户代码到 WEB,然后按绑定即可
-* ### 在[信息板](https://www.wangqaq.com/PoolBar/Information)中可以做的 
+	* #### 若您想要使用彩名的话,需要先绑定用户,前往[地图](https://vrchat.com/home/world/wrld_d9ac19bc-a8c4-42cd-b712-c66dd813bd8c/info)找到User Code System 复制里面的用户代码到 WEB,然后按绑定即可
+ 	*  ![1](https://github.com/user-attachments/assets/b2f3a365-6ebe-452e-9d75-8b798ee98ac2)
+* ### 在[信息板](https://www.wangqaq.com/PoolBar/Information)中可以做的
 	* #### 里面可以看到您的赛季统计和用户等级,任务表,活动等等信息
 
 ## 更新计划
