@@ -56,4 +56,6 @@
 
 ### 特别感谢以下好友对我的帮助(排名不分先后):COCO , 蛋包饭 , 安洁罗塞塔,猪排,埃里吃,等等
 
+> 时间紧凑，双语版的页面在做了
+> Time was tight, and the bilingual version of the page was done
 
