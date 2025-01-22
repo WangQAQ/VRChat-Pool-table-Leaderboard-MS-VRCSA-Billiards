@@ -647,7 +647,7 @@ MonoBehaviour:
       Data: 34|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: ScoreManagerV4, Assembly-CSharp
+      Data: WangQAQ.UdonPlug.ScoreManagerV4, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
