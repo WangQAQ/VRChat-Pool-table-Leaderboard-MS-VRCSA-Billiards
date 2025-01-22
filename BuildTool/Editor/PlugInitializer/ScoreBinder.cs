@@ -8,7 +8,6 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-using WangQAQ.UdonPlug;
 
 namespace WangQAQ.PoolBuild
 {

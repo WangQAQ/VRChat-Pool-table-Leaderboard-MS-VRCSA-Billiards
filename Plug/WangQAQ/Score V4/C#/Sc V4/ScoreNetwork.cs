@@ -11,7 +11,6 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using VRC.SDKBase;
 using VRC.Udon;
-using WangQAQ.UdonPlug;
 
 [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
 public class ScoreNetwork : UdonSharpBehaviour
@@ -45,8 +44,10 @@ public class ScoreNetwork : UdonSharpBehaviour
     //VRC 不让我同步数组，我谢谢它的木琴(红温)
     [HideInInspector][UdonSynced] public byte funcStack0;
     [HideInInspector][UdonSynced] public byte funcStack1;
+    [HideInInspector][UdonSynced] public byte funcStack2;
+    [HideInInspector][UdonSynced] public byte funcStack3;
     #endregion
-    [HideInInspector] public byte[] funcStack = new byte[2];
+    [HideInInspector] public byte[] funcStack = new byte[4];
 
     [HideInInspector][UdonSynced] public int funcStackTop = 0;              //栈顶
 
@@ -108,6 +109,8 @@ public class ScoreNetwork : UdonSharpBehaviour
     {
         funcStack0 = funcStack[0];
         funcStack1 = funcStack[1];
+        funcStack2 = funcStack[2];
+        funcStack3 = funcStack[3];
 
 	}
 
@@ -115,6 +118,8 @@ public class ScoreNetwork : UdonSharpBehaviour
     {
         funcStack[0] = funcStack0;
         funcStack[1] = funcStack1;
+        funcStack[2] = funcStack2;
+        funcStack[3] = funcStack3;
     }
 
 
