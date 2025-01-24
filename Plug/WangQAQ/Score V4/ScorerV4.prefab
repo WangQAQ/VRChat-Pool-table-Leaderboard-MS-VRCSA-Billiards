@@ -2532,11 +2532,6 @@ MonoBehaviour:
   Network: {fileID: 3784405097204600489}
   RankingSystem: {fileID: 5098371406618670518}
   EloAPI: {fileID: 0}
-  _billiardsModule: {fileID: 0}
-  lobbyPlayerList: []
-  nowPlayerList: []
-  startPlayerList: []
-  winningTeamLocal: 4294967295
 --- !u!114 &6488968448878758364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4808,7 +4803,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Score Board V4
+  m_text: Score Board V4A
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 21ac83a342a0b7144a87e1d2c869c740, type: 2}
   m_sharedMaterial: {fileID: -3406411368475958213, guid: 21ac83a342a0b7144a87e1d2c869c740,
@@ -5342,8 +5337,6 @@ MonoBehaviour:
   isInvert: 0
   funcStack0: 0
   funcStack1: 0
-  funcStack2: 0
-  funcStack3: 0
   funcStack: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   funcStackTop: 0
 --- !u!114 &8799685112654531892

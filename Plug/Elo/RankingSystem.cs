@@ -11,6 +11,7 @@ using VRC.SDKBase;
 using VRC.Udon;
 using VRC.Udon.Common.Interfaces;
 using WangQAQ.ED;
+using WangQAQ.UdonPlug;
 using static System.Net.Mime.MediaTypeNames;
 
 [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
