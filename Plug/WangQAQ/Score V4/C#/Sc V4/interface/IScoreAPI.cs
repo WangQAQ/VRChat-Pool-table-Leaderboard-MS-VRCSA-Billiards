@@ -27,7 +27,11 @@ public class IScoreAPI : UdonSharpBehaviour
 	public virtual void _GameEnd(uint winningTeamLocal) { /* Nop */  }
 
 	/* 刷新计分器 */
-	public virtual void _GameReset() { /* Nop */  }
+	public virtual void _GameReset() { /* Nop */ }
+
+	/* 设置练习模式（注意仅设置值，不会同步，为了对接BM） */
+	public virtual void _SetPracticeMode(bool value) { /* Nop */ }
+
 
 	#endregion
 }

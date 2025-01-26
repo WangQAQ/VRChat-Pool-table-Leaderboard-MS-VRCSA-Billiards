@@ -2,6 +2,7 @@
 using TMPro;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.UI;
 using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -12,7 +13,8 @@ public class LeaderboardV2 : ILeaderboard
 
 	[Header("UGUI Object")]
 	[Tooltip("UGUI 分数榜")]
-	[SerializeField] private TextMeshProUGUI TmpUGUI;
+	[SerializeField] private Text ScoreText;
+	[SerializeField] private Text NameText;
 
 	[Space(10)]
 	[Header("Text Setting")]
@@ -55,12 +57,14 @@ public class LeaderboardV2 : ILeaderboard
 			_eloDownload._eloDataList == null   ||
 			_eloDownload._eloDataList.Count == 0)
 		{
-			TmpUGUI.text = loadingString;
+			NameText.text = loadingString;
+			ScoreText.text = loadingString;
 			return;
 		}
 
 		// 格式化字符串
-		string leaderBoardString = "";
+		string leaderBoardNameString = "";
+		string leaderBoardScoreString = "";
 
 		DataList names = _eloDownload._eloNameList;
 		DataList scores = _eloDownload._eloDataList;
@@ -69,16 +73,18 @@ public class LeaderboardV2 : ILeaderboard
 		{
 			var nameTmp = names[i].ToString().Replace(" ", " ");
 			// 转码，去除小数点，格式化，替换空格 \u0020 到 \u00A0 ,裁剪长度
-			leaderBoardString +=
-				(i + 1).ToString() + "."
+			leaderBoardNameString +=
+				(i + 1).ToString() 
+				+ "."
 				+ (nameTmp.Length > stringLen ? nameTmp.Substring(0, stringLen) : nameTmp)
-				+ " "
-				+ $"<color=#FFD700>{scores[i].ToString()}</color>"
 				+ "\n";
+
+			leaderBoardScoreString += scores[i].ToString() + "\n";
 		}
 
 		// Loading String
-		TmpUGUI.text = leaderBoardString;
+		NameText.text = leaderBoardNameString;
+		ScoreText.text = leaderBoardScoreString;
 	}
 
 	#endregion
