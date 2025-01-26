@@ -505,8 +505,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -194.49, y: -0.029907227}
-  m_SizeDelta: {x: -276.24, y: 0}
+  m_AnchoredPosition: {x: -58.429993, y: 0.009521484}
+  m_SizeDelta: {x: 63.86, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &8559714379304876497
 CanvasRenderer:
@@ -774,8 +774,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2610220523203246237}
   m_HandleRect: {fileID: 2023877772282688578}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.9999735
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1357,8 +1357,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 526.47, y: 0}
-  m_SizeDelta: {x: -74.87, y: 0}
+  m_AnchoredPosition: {x: 536.6, y: 0}
+  m_SizeDelta: {x: -734.53, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &2515261323234379917
 CanvasRenderer:
@@ -1837,7 +1837,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Score   #   Rate  #  Count
+  m_Text: 'Score   '
 --- !u!1 &4390672536924116181
 GameObject:
   m_ObjectHideFlags: 0
@@ -2519,7 +2519,7 @@ MonoBehaviour:
   ScoreText: {fileID: 1909116495986165492}
   NameText: {fileID: 3150269014957572077}
   PlayerRateText: {fileID: 6171728871738003711}
-  stringLen: 10
+  stringLen: 16
   loadingString: '- <size=50>Loading_Failed</size> -<br>- <size=120>QAQ</size> -<br>-
     <size=50>Check_Your_Internet</size> -'
 --- !u!114 &6196695966592930870

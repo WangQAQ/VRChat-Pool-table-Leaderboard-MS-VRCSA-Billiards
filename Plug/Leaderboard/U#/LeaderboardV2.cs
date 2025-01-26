@@ -83,7 +83,7 @@ public class LeaderboardV2 : ILeaderboard
 				+ (nameTmp.Length > stringLen ? nameTmp.Substring(0, stringLen) : nameTmp)
 				+ "\n";
 
-			leaderBoardScoreString += scores[i].ToString() + "\n";
+			leaderBoardScoreString += scores[i].String.Split("#")[0] + "\n";
 
 			/* 尝试查找本地玩家 */
 			if (nameTmp == Networking.LocalPlayer.displayName)
