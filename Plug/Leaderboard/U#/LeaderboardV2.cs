@@ -11,10 +11,13 @@ public class LeaderboardV2 : ILeaderboard
 {
 	#region EditTimeVariable
 
-	[Header("UGUI Object")]
-	[Tooltip("UGUI 分数榜")]
+	[Header("UI Object")]
+	[Tooltip("UI 分数榜")]
 	[SerializeField] private Text ScoreText;
 	[SerializeField] private Text NameText;
+
+	/* 玩家个人等级排行 */
+	[SerializeField] private Text PlayerRateText;
 
 	[Space(10)]
 	[Header("Text Setting")]
@@ -52,9 +55,9 @@ public class LeaderboardV2 : ILeaderboard
 	/* 序列化排行榜字符串 */
 	private void loadString()
 	{
-		if (_eloDownload._eloNameList == null	|| 
-			_eloDownload._eloNameList.Count == 0||
-			_eloDownload._eloDataList == null   ||
+		if (_eloDownload._eloNameList == null ||
+			_eloDownload._eloNameList.Count == 0 ||
+			_eloDownload._eloDataList == null ||
 			_eloDownload._eloDataList.Count == 0)
 		{
 			NameText.text = loadingString;
@@ -65,6 +68,7 @@ public class LeaderboardV2 : ILeaderboard
 		// 格式化字符串
 		string leaderBoardNameString = "";
 		string leaderBoardScoreString = "";
+		string leaderBoardPlayerRate = "# NotFind";
 
 		DataList names = _eloDownload._eloNameList;
 		DataList scores = _eloDownload._eloDataList;
@@ -74,17 +78,24 @@ public class LeaderboardV2 : ILeaderboard
 			var nameTmp = names[i].ToString().Replace(" ", " ");
 			// 转码，去除小数点，格式化，替换空格 \u0020 到 \u00A0 ,裁剪长度
 			leaderBoardNameString +=
-				(i + 1).ToString() 
+				(i + 1).ToString()
 				+ "."
 				+ (nameTmp.Length > stringLen ? nameTmp.Substring(0, stringLen) : nameTmp)
 				+ "\n";
 
 			leaderBoardScoreString += scores[i].ToString() + "\n";
+
+			/* 尝试查找本地玩家 */
+			if (nameTmp == Networking.LocalPlayer.displayName)
+			{
+				leaderBoardPlayerRate = $"# {(i + 1).ToString()}";
+			}
 		}
 
 		// Loading String
 		NameText.text = leaderBoardNameString;
 		ScoreText.text = leaderBoardScoreString;
+		PlayerRateText.text = leaderBoardPlayerRate;
 	}
 
 	#endregion
