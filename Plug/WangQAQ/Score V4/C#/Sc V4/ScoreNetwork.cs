@@ -32,9 +32,13 @@ public class ScoreNetwork : UdonSharpBehaviour
     // 状态量
     [HideInInspector][UdonSynced] public byte State;
     [HideInInspector][UdonSynced] public bool MessagesState = false;
+	[HideInInspector][UdonSynced] public bool MessagesPracticeState = false;
 
-    // 上传时同步日期
-    [HideInInspector][UdonSynced] public string Date = "";
+	// 上传系统状态量(使用后清除)
+	[HideInInspector][UdonSynced] public bool NeedUnlockUrl = false;
+
+	// 上传时同步日期
+	[HideInInspector][UdonSynced] public string Date = "";
 
     // 反转状态
     [HideInInspector][UdonSynced] public bool isInvert = false;

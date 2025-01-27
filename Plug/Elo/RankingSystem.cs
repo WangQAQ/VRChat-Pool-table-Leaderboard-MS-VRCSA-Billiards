@@ -56,6 +56,8 @@ public class RankingSystem : UdonSharpBehaviour
 	#region upload
 	public void UpdateCopyData(string player1, string player2, string score1, string score2, uint ballMode, string Date)
 	{
+		Debug.Log("Make URL");
+
 		Player1 = player1;
 		Player2 = player2;
 		if (score1 == score2 ||
@@ -198,6 +200,16 @@ public class RankingSystem : UdonSharpBehaviour
 	{
 		copyField.text = "null";
 		errorText.text = "";
+	}
+
+	public void LockUrl()
+	{
+		pasteField.readOnly = true;
+	}
+
+	public void UnlockUrl()
+	{
+		pasteField.readOnly = false;
 	}
 	#endregion
 

@@ -1207,6 +1207,7 @@ public class BilliardsModule : UdonSharpBehaviour
 			}
 			else
 			{
+				_scoreAPI._SetPracticeMode(true);
 				_scoreAPI._GameReset();
 			}
 		}
@@ -1352,6 +1353,7 @@ public class BilliardsModule : UdonSharpBehaviour
 			if (_scoreAPI != null)
 			{
 				//发送事件
+				_scoreAPI._SetPracticeMode(false);
 				_scoreAPI._GameReset();
 			}
 		}
@@ -3995,6 +3997,7 @@ public class BilliardsModule : UdonSharpBehaviour
 			}
 			else
 			{
+				_scoreAPI._SetPracticeMode(false);
 				_scoreAPI._GameReset();
 			}
 		}

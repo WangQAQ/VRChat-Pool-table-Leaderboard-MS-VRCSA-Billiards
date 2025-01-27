@@ -30,9 +30,10 @@ namespace WangQAQ.UdonPlug
 		[SerializeField] public TextMeshProUGUI Elo2 = null;
 		[Header("Info")]
 		[SerializeField] public GameObject Messages = null;
+		[SerializeField] public GameObject MessagesPractice = null;
 		[Header("Plug")]
 		[SerializeField] public ScoreNetwork Network = null;
-		[SerializeField] public RankingSystem RankingSystem = null;
+		[SerializeField] public RankingSystem _RankingSystem = null;
 		[SerializeField] public IEloDownload EloAPI = null;
 
 		// Ioc
@@ -50,8 +51,9 @@ namespace WangQAQ.UdonPlug
 				Elo1 == null ||
 				Elo2 == null ||
 				Messages == null ||
+				MessagesPractice == null ||
 				Network == null ||
-				RankingSystem == null
+				_RankingSystem == null
 			  )
 			{
 				this.enabled = false;
@@ -60,7 +62,7 @@ namespace WangQAQ.UdonPlug
 
 			//Init
 			Network._Init(this);
-			RankingSystem._Init(this);
+			_RankingSystem._Init(this);
 
 			_billiardsModule = billiardsModule;
 		}
@@ -81,7 +83,7 @@ namespace WangQAQ.UdonPlug
 			BlueScoreTMP.text = Network.PlayerBScore.ToString();
 
 			Messages.SetActive(Network.MessagesState);
-
+			MessagesPractice.SetActive(Network.MessagesPracticeState);
 			//ELO 
 		}
 
@@ -160,7 +162,7 @@ namespace WangQAQ.UdonPlug
 		{
 			Debug.Log("[SCM] lobbyOpenRemote");
 
-			RankingSystem.ClearURL();
+			_RankingSystem.LockUrl();
 
 			_ReflashEloScore();
 			_Reflash();
@@ -171,7 +173,19 @@ namespace WangQAQ.UdonPlug
 		{
 			Debug.Log("[SCM] playerChangedRemote");
 
-			RankingSystem.ClearURL();
+			if(Network.State == 0 || Network.NeedUnlockUrl)
+			{
+				/* 当玩家全部退出，解锁URL */
+				_RankingSystem.UnlockUrl();
+
+				/* 重置状态（连同所有者会一起重置） */
+				Network.NeedUnlockUrl = false;
+			}
+			else
+			{
+				/* 当玩家加入，锁定URL */
+				_RankingSystem.LockUrl();
+			}
 
 			_ReflashEloScore();
 			_Reflash();
@@ -182,7 +196,7 @@ namespace WangQAQ.UdonPlug
 		{
 			Debug.Log("[SCM] gameStartedRemote");
 
-			RankingSystem.ClearURL();
+			_RankingSystem.LockUrl();
 
 			_ReflashEloScore();
 			_Reflash();
@@ -194,8 +208,10 @@ namespace WangQAQ.UdonPlug
 			// 分数上传系统 (当正常结束，没有触发换人反作弊时生成链接)
 			if (Network.State == 3)
 			{
-				RankingSystem.UpdateCopyData(Network.PlayerA, Network.PlayerB, Network.PlayerAScore.ToString(), Network.PlayerBScore.ToString(), Network.Mode, Network.Date);
+				_RankingSystem.UpdateCopyData(Network.PlayerA, Network.PlayerB, Network.PlayerAScore.ToString(), Network.PlayerBScore.ToString(), Network.Mode, Network.Date);
 			}
+
+			_RankingSystem.UnlockUrl();
 
 			Debug.Log("[SCM] gameEndRemote");
 			_ReflashEloScore();
@@ -205,6 +221,9 @@ namespace WangQAQ.UdonPlug
 		// ID4
 		public void gameResetRemote()
 		{
+			_RankingSystem.UnlockUrl();
+			_RankingSystem.ClearURL();
+
 			Debug.Log("[SCM] gameResetRemote");
 			_ReflashEloScore();
 			_Reflash();
@@ -300,6 +319,12 @@ namespace WangQAQ.UdonPlug
 					{
 						/* 状态判断玩家是否相等，相等状态不变（用于下一回合） */
 						Network.State = 3;
+
+						/* 当玩家全部退出，解锁URL */
+						if(string.IsNullOrEmpty(nowPlayerList[0]) || string.IsNullOrEmpty(nowPlayerList[1]))
+						{
+							Network.NeedUnlockUrl = true;
+						}
 					}
 					else
 					{
@@ -413,7 +438,10 @@ namespace WangQAQ.UdonPlug
 				Network.funcStack[Network.funcStackTop] = 4;
 				Network.funcStackTop++;
 			}
+
+			/* PAC 状态重置 */
 			Network.MessagesState = false;
+
 			_ResetValue();
 			Network.State = 0;
 			Network._SetBufferStatus();
@@ -457,6 +485,11 @@ namespace WangQAQ.UdonPlug
 			gameResetLocal();
 		}
 
+		public override void _SetPracticeMode(bool value)
+		{
+			Network.MessagesPracticeState = value;
+		}
+
 		#endregion
 
 		public override void OnPlayerLeft(VRCPlayerApi player)
@@ -464,6 +497,7 @@ namespace WangQAQ.UdonPlug
 			string leftPlayerName = player.displayName;
 			if (leftPlayerName == Network.PlayerA || leftPlayerName == Network.PlayerB)
 			{
+				_RankingSystem.ClearURL();
 				_GameReset();
 			}
 		}
