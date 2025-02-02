@@ -8,6 +8,8 @@
 #define EIJIS_SEMIAUTOCALL
 #define EIJIS_10BALL
 
+#define WANGQAQ_SkinnedMeshBall
+
 // #define EIJIS_DEBUG_PIRAMIDSCORE
 
 using UdonSharp;
@@ -65,9 +67,13 @@ public class GraphicsManager : UdonSharpBehaviour
 
 	[SerializeField] GameObject[] timers;
 
+	/* 4球Mesh */
 	private Mesh[] meshOverrideFourBall = new Mesh[4];
 #if EIJIS_PYRAMID
+	/* 俄罗斯Mesh */
 	private Mesh[] meshOverridePyramidBall = new Mesh[BilliardsModule.PYRAMID_BALLS];
+
+	/* 原Mesh(用来打完俄罗斯后重置) */
 	private Mesh[] meshOverrideRegular = new Mesh[BilliardsModule.PYRAMID_BALLS];
 #else
     private Mesh[] meshOverrideRegular = new Mesh[4];
@@ -123,6 +129,19 @@ public class GraphicsManager : UdonSharpBehaviour
 
 		winnerText_go = winnerText.gameObject;
 
+#if WANGQAQ_SkinnedMeshBall
+		Material[] materials = table.BaseBall.materials;
+		ballMaterial = materials[0];
+		shadowMaterial = materials[1];
+		ballMaterial.name = ballMaterial.name + " for " + table_.gameObject.name;
+		shadowMaterial.name = shadowMaterial.name + " for " + table_.gameObject.name;
+
+		Material[] newMaterials = new Material[] { ballMaterial, shadowMaterial };
+
+		/* 设置贴图对象 */
+		table.BaseBall.materials = newMaterials;
+		table.RED15Ball.materials = newMaterials;
+#else
 		Material[] materials = balls[0].GetComponent<MeshRenderer>().materials; // create a new instance for this table
 		ballMaterial = materials[0];
 		shadowMaterial = materials[1];
@@ -154,6 +173,7 @@ public class GraphicsManager : UdonSharpBehaviour
         {
             meshOverrideRegular[i + 1] = balls[13 + i].GetComponent<MeshFilter>().sharedMesh;
         }
+#endif
 #endif
 #if EIJIS_CUSHION_EFFECT
 
@@ -289,6 +309,10 @@ public class GraphicsManager : UdonSharpBehaviour
 
 	private void tickIntroBall(Transform ball, float offset)
 	{
+#if WANGQAQ_SkinnedMeshBall
+		if (!ball.gameObject.activeSelf) return;
+#endif
+
 		float localTime = Mathf.Clamp(introAnimationTime - offset, 0.0f, 1.0f);
 		float localTimeInverse = (1.0f - localTime) * (table.k_BALL_DIAMETRE / BilliardsModule.ballMeshDiameter);
 
@@ -301,6 +325,7 @@ public class GraphicsManager : UdonSharpBehaviour
 
 	private void tickIntroAnimation()
 	{
+
 		if (introAnimationTime <= 0.0f) return;
 
 		introAnimationTime -= Time.deltaTime;
@@ -446,7 +471,7 @@ public class GraphicsManager : UdonSharpBehaviour
 
 		string color = (string)table.ColorNameV2.GetProgramVariable("outColor");
 
-		if(!string.IsNullOrWhiteSpace(color))
+		if (!string.IsNullOrWhiteSpace(color))
 			return color;
 
 		return player.displayName;
@@ -728,32 +753,34 @@ int uniform_cue_colour;
 		}
 	}
 
+	/* 切换Ball显示 */
 	public void _ShowBalls()
 	{
+
 		if (table.is9Ball)
 		{
-			for (int i = 0; i <= 9; i++)
-				table.balls[i].SetActive(true);
+			for (int i = 0; i < 10; i++)
+				setBallActive(table.balls[i], true);
 
 #if EIJIS_MANY_BALLS
 			for (int i = 10; i < BilliardsModule.MAX_BALLS; i++)
 #else
             for (int i = 10; i < 16; i++)
 #endif
-				table.balls[i].SetActive(false);
+				setBallActive(table.balls[i], false);
 		}
 #if EIJIS_10BALL
 		else if (table.is10Ball)
 		{
-			for (int i = 0; i <= 10; i++)
-				table.balls[i].SetActive(true);
+			for (int i = 0; i < 11; i++)
+				setBallActive(table.balls[i], true);
 
 #if EIJIS_MANY_BALLS
 			for (int i = 11; i < BilliardsModule.MAX_BALLS; i++)
 #else
 			for (int i = 11; i < 16; i++)
 #endif
-				table.balls[i].SetActive(false);
+				setBallActive(table.balls[i], false);
 		}
 #endif
 		else if (table.is4Ball)
@@ -763,13 +790,13 @@ int uniform_cue_colour;
 #else
             for (int i = 1; i < 16; i++)
 #endif
-				table.balls[i].SetActive(false);
+				setBallActive(table.balls[i], false);
 
-			table.balls[0].SetActive(true);
-			table.balls[13].SetActive(true);
-			table.balls[14].SetActive(true);
+			setBallActive(table.balls[0], true);
+			setBallActive(table.balls[13], true);
+			setBallActive(table.balls[14], true);
 #if EIJIS_CAROM
-			table.balls[15].SetActive(!table.is3Cusion && !table.is2Cusion && !table.is1Cusion && !table.is0Cusion);
+			setBallActive(table.balls[15], !table.is3Cusion && !table.is2Cusion && !table.is1Cusion && !table.is0Cusion);
 #else
             table.balls[15].SetActive(true);
 #endif
@@ -781,14 +808,18 @@ int uniform_cue_colour;
 #endif
 		{
 #if EIJIS_SNOOKER15REDS
+			/* 
+			 * 开启 0-16  25-31  
+			 * 关闭 16-25 31-32
+			 */
 			for (int i = 0; i < 16; i++)
-				table.balls[i].SetActive(true);
+				setBallActive(table.balls[i], true);
 			for (int i = 16; i < 25; i++)
-				table.balls[i].SetActive(false);
+				setBallActive(table.balls[i], false);
 			for (int i = 25; i < 31; i++)
-				table.balls[i].SetActive(true);
+				setBallActive(table.balls[i], true);
 			for (int i = 31; i < BilliardsModule.MAX_BALLS; i++)
-				table.balls[i].SetActive(false);
+				setBallActive(table.balls[i], false);
 #else
             for (int i = 0; i < 13; i++)
                 table.balls[i].SetActive(true);
@@ -798,15 +829,39 @@ int uniform_cue_colour;
 		}
 		else
 		{
+			/*
+			* 这里是8球
+ `			* 开启 00-16
+			* 关闭 16-32
+			*/
 			for (int i = 0; i < 16; i++)
 			{
-				table.balls[i].SetActive(true);
+				setBallActive(table.balls[i], true);
 			}
 #if EIJIS_MANY_BALLS
 			for (int i = 16; i < BilliardsModule.MAX_BALLS; i++)
-				table.balls[i].SetActive(false);
+				setBallActive(table.balls[i], false);
 #endif
 		}
+	}
+
+	/* 设置球状态 */
+	private void setBallActive(GameObject gameObject, bool isActive)
+	{
+#if WANGQAQ_SkinnedMeshBall
+		if (isActive)
+		{
+			gameObject.transform.localScale = Vector3.one;
+			gameObject.SetActive(true);
+		}
+		else
+		{
+			gameObject.transform.localScale = new Vector3(0, 0, 0);
+			gameObject.SetActive(false);
+		}
+#else
+		gameObject.SetActive(isActive);
+#endif
 	}
 
 	public void _OnLobbyOpened()
@@ -868,15 +923,34 @@ int uniform_cue_colour;
 		_UpdateTeamColor(0);
 #endif
 
+		/* 4球替换Mesh */
 		if (table.is4Ball)
 		{
+#if !WANGQAQ_SkinnedMeshBall
 			balls[0].GetComponent<MeshFilter>().sharedMesh = meshOverrideFourBall[0];
 			balls[13].GetComponent<MeshFilter>().sharedMesh = meshOverrideFourBall[1];
 			balls[14].GetComponent<MeshFilter>().sharedMesh = meshOverrideFourBall[2];
 			balls[15].GetComponent<MeshFilter>().sharedMesh = meshOverrideFourBall[3];
+#endif
 		}
 		else
 		{
+#if WANGQAQ_SkinnedMeshBall
+			table.BaseBall.SetBlendShapeWeight(0, 0);
+#if EIJIS_SNOOKER15REDS
+			if (table.isSnooker)
+#else
+			if (table.isSnooker6Red)
+#endif
+			{
+				table.RED15Ball.enabled = true;
+			}
+			else
+			{
+				table.RED15Ball.enabled = false;
+			}
+#else
+			/* 俄罗斯Mesh */
 #if EIJIS_PYRAMID
 			if (table.isPyramid)
 			{
@@ -898,11 +972,13 @@ int uniform_cue_colour;
             balls[14].GetComponent<MeshFilter>().sharedMesh = meshOverrideRegular[2];
             balls[15].GetComponent<MeshFilter>().sharedMesh = meshOverrideRegular[3];
 #endif
+#endif
 		}
 
 		_ShowBalls();
 	}
 
+	/* 此处设置台球颜色和桌子颜色（斯诺克，9/10球切换，12球斯诺克） */
 	public void _UpdateTableColorScheme()
 	{
 #if EIJIS_10BALL
@@ -970,7 +1046,6 @@ int uniform_cue_colour;
 
 			pColour0 = table.k_colour_default;
 			pColour1 = table.k_colour_default;
-
 			ballMaterial.SetTexture("_MainTex", table.textureSets[3]);
 		}
 #endif
@@ -1244,6 +1319,20 @@ int uniform_cue_colour;
 	{
 		if (!table.is4Ball) return;
 
+		/* 四球击球后切换材质和母球位置 */
+#if WANGQAQ_SkinnedMeshBall
+		/* 蒙皮着色器设置形态动画切换 */
+		if (fourBallCueBall == 0)
+		{
+			Debug.Log("4ball:A");
+			table.BaseBall.SetBlendShapeWeight(0, 0);
+		}
+		else
+		{
+			Debug.Log("4ball:B");
+			table.BaseBall.SetBlendShapeWeight(0, 100);
+		}
+#else
 		if (fourBallCueBall == 0)
 		{
 			table.balls[0].GetComponent<MeshFilter>().sharedMesh = meshOverrideFourBall[0];
@@ -1254,6 +1343,7 @@ int uniform_cue_colour;
 			table.balls[13].GetComponent<MeshFilter>().sharedMesh = meshOverrideFourBall[0];
 			table.balls[0].GetComponent<MeshFilter>().sharedMesh = meshOverrideFourBall[1];
 		}
+#endif
 	}
 
 #if EIJIS_CALLSHOT
@@ -1339,8 +1429,14 @@ int uniform_cue_colour;
 
 				float height = table._GetTableBase().transform.Find(".TABLE_SURFACE").position.y + 0.0025f;
 				shadowMaterial.SetFloat("_Floor", height);
+#if !WANGQAQ_SkinnedMeshBall
 				shadowMaterial.SetFloat("_Scale", table.k_BALL_RADIUS / 0.03f);//0.03f is the radius of the ball's 3D mesh
+#endif
 			}
+#if WANGQAQ_SkinnedMeshBall
+			table.BaseBall.materials = newMaterials;
+			table.RED15Ball.materials = newMaterials;
+#else
 #if EIJIS_MANY_BALLS
 			for (int i = 0; i < BilliardsModule.MAX_BALLS; i++)
 #else
@@ -1349,6 +1445,7 @@ int uniform_cue_colour;
 			{
 				balls[i].GetComponent<MeshRenderer>().materials = newMaterials;
 			}
+#endif
 		}
 	}
 	public void _SetUpReflectionProbe()

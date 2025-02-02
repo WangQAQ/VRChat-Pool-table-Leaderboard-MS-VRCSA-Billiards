@@ -6,7 +6,30 @@
  *  API : ScoreManagerHook
  */
 
+/*
+                   _ooOoo_
+                  o8888888o
+                  88" . "88
+                  (| -_- |)
+                  O\  =  /O
+               ____/`---'\____
+             .'  \\|     |//  `.
+            /  \\|||  :  |||//  \
+           /  _||||| -:- |||||-  \
+           |   | \\\  -  /// |   |
+           | \_|  ''\---/''  |   |
+           \  .-\__  `-`  ___/-. /
+         ___`. .'  /--.--\  `. . __
+      ."" '<  `.___\_<|>_/___.'  >'"".
+     | | :  `- \`.;`\ _ /`;.`/ - ` : | |
+     \  \ `-.   \_ __\ /__ _/   .-` /  /
+======`-.____`-.___\_____/___.-`____.-'======
+                   `=---='
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            佛祖保佑       永无BUG
+*/
 
+using Cysharp.Threading.Tasks.Triggers;
 using System;
 using TMPro;
 using UdonSharp;
@@ -122,9 +145,8 @@ namespace WangQAQ.UdonPlug
 
 			Debug.Log("[SCM]" + Network.State);
 			// 调用栈
-			for (int i = 0; i <= Network.funcStackTop; i++)
+			for (int i = 0; i <= Network.funcStackTopLocal; i++)
 			{
-
 				int inFunc = Network.funcStack[i];
 
 				switch (inFunc)
@@ -154,7 +176,7 @@ namespace WangQAQ.UdonPlug
 			{
 				Network.funcStack[i] = 0XFF;
 			}
-			Network.funcStackTop = 0;
+			Network.funcStackTopLocal = 0;
 		}
 
 		//ID0
@@ -173,17 +195,14 @@ namespace WangQAQ.UdonPlug
 		{
 			Debug.Log("[SCM] playerChangedRemote");
 
-			if(Network.State == 0 || Network.NeedUnlockUrl)
+			if(Network.UnlockUrl)
 			{
-				/* 当玩家全部退出，解锁URL */
+				/* 解锁URL */
 				_RankingSystem.UnlockUrl();
-
-				/* 重置状态（连同所有者会一起重置） */
-				Network.NeedUnlockUrl = false;
 			}
 			else
 			{
-				/* 当玩家加入，锁定URL */
+				/* 锁定URL */
 				_RankingSystem.LockUrl();
 			}
 
@@ -239,6 +258,8 @@ namespace WangQAQ.UdonPlug
 		{
 			Debug.Log("[SCM] LobbyOpened");
 
+			Network.MessagesPracticeState = false;
+
 			if ((
 			lobbyPlayerList[0] != Network.PlayerA &&
 			lobbyPlayerList[0] != Network.PlayerB &&
@@ -261,10 +282,10 @@ namespace WangQAQ.UdonPlug
 			lobbyPlayerList = null;
 
 			// 跟新状态
-			if (Network.funcStackTop < 4)
+			if (Network.funcStackTopLocal < 4)
 			{
-				Network.funcStack[Network.funcStackTop] = 0;
-				Network.funcStackTop++;
+				Network.funcStack[Network.funcStackTopLocal] = 0;
+				Network.funcStackTopLocal++;
 			}
 			Network._SetBufferStatus();
 		}
@@ -281,7 +302,8 @@ namespace WangQAQ.UdonPlug
 			if (
 				string.IsNullOrEmpty(nowPlayerList[0]) &&
 				string.IsNullOrEmpty(nowPlayerList[1]) &&
-				Network.State == 1
+				Network.State == 1 &&
+				gameState != 2
 				)
 			{
 				/* 玩家为空，自动重置 */
@@ -289,6 +311,8 @@ namespace WangQAQ.UdonPlug
 
 				_ResetValue();
 
+				/* 解锁 */
+				Network.UnlockUrl = true;
 				Network.State = 0;
 			}
 			else if (Network.State == 2)
@@ -299,11 +323,15 @@ namespace WangQAQ.UdonPlug
 				// 赋值玩家名
 				_SetName(nowPlayerList);
 
+				/* 锁定 */
+				Network.UnlockUrl = false;
+
 				Network.MessagesState = true;
 				Network.State = 1;
 			}
 			else
 			{
+				/* 判断是否是回合结束状态 */
 				if (Network.State == 3)
 				{
 					/* 回合结束时状态 */
@@ -321,15 +349,25 @@ namespace WangQAQ.UdonPlug
 						Network.State = 3;
 
 						/* 当玩家全部退出，解锁URL */
-						if(string.IsNullOrEmpty(nowPlayerList[0]) || string.IsNullOrEmpty(nowPlayerList[1]))
+						if(string.IsNullOrEmpty(nowPlayerList[0]) && string.IsNullOrEmpty(nowPlayerList[1]))
 						{
-							Network.NeedUnlockUrl = true;
+							/* 全部退出后解锁 */
+							Network.UnlockUrl = true;
+						}
+						else
+						{
+							/* 若有玩家锁定URL输入 */
+							Network.UnlockUrl = false;
 						}
 					}
 					else
 					{
 						/* 玩家名称不相等的时候默认重置 */
 						Network.State = 1;
+
+						/* 锁定 */
+						Network.UnlockUrl = false;
+
 						_ResetValue();
 						_SetName(nowPlayerList);
 					}
@@ -338,6 +376,10 @@ namespace WangQAQ.UdonPlug
 				{
 					/* 正常加入时切换玩家状态（若桌子在游戏中不触发） */
 					Network.State = 1;
+
+					/* 玩家加入后锁定 */
+					Network.UnlockUrl = false;
+
 					_ResetValue();
 					_SetName(nowPlayerList);
 				}
@@ -346,10 +388,10 @@ namespace WangQAQ.UdonPlug
 			// 释放数组
 			nowPlayerList = null;
 
-			if (Network.funcStackTop < 4)
+			if (Network.funcStackTopLocal < 4)
 			{
-				Network.funcStack[Network.funcStackTop] = 1;
-				Network.funcStackTop++;
+				Network.funcStack[Network.funcStackTopLocal] = 1;
+				Network.funcStackTopLocal++;
 			}
 			Network._SetBufferStatus();
 		}
@@ -377,10 +419,10 @@ namespace WangQAQ.UdonPlug
 			}
 
 			startPlayerList = null;
-			if (Network.funcStackTop < 4)
+			if (Network.funcStackTopLocal < 4)
 			{
-				Network.funcStack[Network.funcStackTop] = 2;
-				Network.funcStackTop++;
+				Network.funcStack[Network.funcStackTopLocal] = 2;
+				Network.funcStackTopLocal++;
 			}
 			Network._SetBufferStatus();
 		}
@@ -418,10 +460,10 @@ namespace WangQAQ.UdonPlug
 				Network.State = 3;
 			}
 
-			if (Network.funcStackTop < 4)
+			if (Network.funcStackTopLocal < 4)
 			{
-				Network.funcStack[Network.funcStackTop] = 3;
-				Network.funcStackTop++;
+				Network.funcStack[Network.funcStackTopLocal] = 3;
+				Network.funcStackTopLocal++;
 			}
 
 			winningTeamLocal = 0xFFFFFFFF;
@@ -433,10 +475,10 @@ namespace WangQAQ.UdonPlug
 		{
 			Debug.Log("[SCM] ResetSC");
 
-			if (Network.funcStackTop < 4)
+			if (Network.funcStackTopLocal < 4)
 			{
-				Network.funcStack[Network.funcStackTop] = 4;
-				Network.funcStackTop++;
+				Network.funcStack[Network.funcStackTopLocal] = 4;
+				Network.funcStackTopLocal++;
 			}
 
 			/* PAC 状态重置 */

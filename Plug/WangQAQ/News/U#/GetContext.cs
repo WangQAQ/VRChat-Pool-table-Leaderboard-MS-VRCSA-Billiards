@@ -1,10 +1,6 @@
-﻿
-using TMPro;
-using UdonSharp;
+﻿using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
-using VRC.SDKBase;
-using VRC.Udon;
 using WangQAQ.UdonPlug;
 
 public class GetContext : UdonSharpBehaviour
@@ -16,17 +12,17 @@ public class GetContext : UdonSharpBehaviour
 
 	private GetMainContext _ContextDownloader;
 
-	[SerializeField] public TextMeshProUGUI _titleTMP;
-	[SerializeField] public TextMeshProUGUI _contextTMP;
+	[SerializeField] public Text _title;
+	[SerializeField] public Text _context;
 
 	public void _Init()
 	{
-		_ContextDownloader = transform.Find("../../../../../../ContextDownloader").GetComponent<GetMainContext>();
-		_titleTMP = transform.Find("frame/Title/Text").GetComponent<TextMeshProUGUI>();
-		_contextTMP = transform.Find("frame/Context/Text").GetComponent<TextMeshProUGUI>();
+		_ContextDownloader = transform.Find("../../../../../../../ContextDownloader").GetComponent<GetMainContext>();
+		_title = transform.Find("frame/Title/Text").GetComponent<Text>();
+		_context = transform.Find("frame/Context/Text").GetComponent<Text>();
 
-		_titleTMP.text = Title;
-		_contextTMP.text = Description;
+		_title.text = Title;
+		_context.text = Description;
 	}
 
 	public void OnChick()
@@ -38,4 +34,3 @@ public class GetContext : UdonSharpBehaviour
 		}
 	}
 }
-
