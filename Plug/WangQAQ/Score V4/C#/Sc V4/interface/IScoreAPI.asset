@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: IScoreAPI
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: bd335c46c6a38964793bfbe86dd754ab,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: e6b9fc7e7fb976e4992cb0c746d6cb46,
     type: 2}
   udonAssembly: 
   assemblyError: 

@@ -18,79 +18,72 @@ namespace WangQAQ.PoolBuild
 
 		public async Task<(bool State, string)> UploadOrUpdateKeyAsync()
 		{
-			if (VRCSdkControlPanel.TryGetBuilder<IVRCSdkWorldBuilderApi>(out var builder))
+			var key = GenerateRandomKey(32);
+			VRCWorld vrcWorldOBJ;
+
+			/* 获取世界对象 */
+			try
 			{
-				var key = GenerateRandomKey(32);
-				VRCWorld vrcWorldOBJ;
+				var pipelineOBJ = Component.FindObjectsOfType<PipelineManager>().Single();
 
-				/* 获取世界对象 */
-				try
+				vrcWorldOBJ = await VRCApi.GetWorld(pipelineOBJ.blueprintId);
+
+				if (vrcWorldOBJ.Name == null || vrcWorldOBJ.ID == null)
+					return (false, "Get World Object Error");
+			}
+			catch
+			{
+				return (false, "No PipelineManager Find Error");
+			}
+
+			/* 获取世界名称 */
+			var GUID = Guid.Parse(vrcWorldOBJ.ID.Split('_')[1]);
+			var Name = vrcWorldOBJ.Name;
+
+			/* 上传对象 */
+			if (!await isMapExist(GUID))
+			{
+				/* 不存在地图 创建地图 */
+				var data = await keyHttpSender.CreateWorldKey(Name, GUID, key);
+
+				if (data.State)
 				{
-					var pipelineOBJ = Component.FindObjectsOfType<PipelineManager>().Single();
-
-					vrcWorldOBJ = await VRCApi.GetWorld(pipelineOBJ.blueprintId);
-
-					if (vrcWorldOBJ.Name == null || vrcWorldOBJ.ID == null)
-						return (false, "Get World Object Error");
-				}
-				catch
-				{
-					return (false, "No PipelineManager Find Error");
-				}
-
-				/* 获取世界名称 */
-				var GUID = Guid.Parse(vrcWorldOBJ.ID.Split('_')[1]);
-				var Name = vrcWorldOBJ.Name;
-
-				/* 上传对象 */
-				if (!await isMapExist(GUID))
-				{
-					/* 不存在地图 创建地图 */
-					var data = await keyHttpSender.CreateWorldKey(Name, GUID, key);
-
-					if (data.State)
+					/* 成功 */
+					if (data.TmpKey != null)
 					{
-						/* 成功 */
-						if (data.TmpKey != null)
-						{
-							/* 写入TmpKey */
-							BuildToolLib.SetTmpKey(GUID.ToString(), data.TmpKey);
-						}
-
-						/* 写入主密钥 */
-						BuildToolLib.SetKey(GUID.ToString(), key);
-
-						return (true, "Upload Key Done");
+						/* 写入TmpKey */
+						BuildToolLib.SetTmpKey(GUID.ToString(), data.TmpKey);
 					}
-					else
-					{
-						/* 失败 */
-						return (false, data.Message);
-					}
+
+					/* 写入主密钥 */
+					BuildToolLib.SetKey(GUID.ToString(), key);
+
+					return (true, "Upload Key Done");
 				}
 				else
 				{
-					/* 存在地图 更新地图 */
-					var data = await keyHttpSender.UpdateWorldKey(Name, GUID, key);
-
-					if (data.State)
-					{
-						/* 写入主密钥 */
-						BuildToolLib.SetKey(GUID.ToString(), key);
-
-						/* 成功 */
-						return (true, "Update Key Done");
-					}
-					else
-					{
-						/* 失败 */
-						return (false, data.Message);
-					}
+					/* 失败 */
+					return (false, data.Message);
 				}
 			}
 			else
 			{
-				return (false, "Unknown SDK Error");
+				/* 存在地图 更新地图 */
+				var data = await keyHttpSender.UpdateWorldKey(Name, GUID, key);
+
+				if (data.State)
+				{
+					/* 写入主密钥 */
+					BuildToolLib.SetKey(GUID.ToString(), key);
+
+					/* 成功 */
+					return (true, "Update Key Done");
+				}
+				else
+				{
+					/* 失败 */
+					return (false, data.Message);
+				}
 			}
 		}
 

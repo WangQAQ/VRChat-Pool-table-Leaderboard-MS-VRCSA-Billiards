@@ -248,7 +248,7 @@ namespace WangQAQ.Plug
 			if (GUILayout.Button("My Account (Open Web) (个人账号)"))
 			{
 				/* 测试链接 */
-				string url = "http://localhost:5195/poolbar/account";
+				string url = "https://www.wangqaq.com/PoolBar/Account";
 				Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
 			}
 
