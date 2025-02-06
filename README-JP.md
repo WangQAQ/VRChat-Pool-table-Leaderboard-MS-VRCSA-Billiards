@@ -1,3 +1,5 @@
+> Use AI Translation
+
 # VRCビリヤード - リーダーボード - スヌーカー
 ## プロジェクト継承テーブル
 * #### MS-VRCSA-Billiards
