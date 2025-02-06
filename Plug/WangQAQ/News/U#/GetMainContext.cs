@@ -1,24 +1,16 @@
-﻿
-using System.Security.Policy;
-using System.Text;
-using System;
-using TMPro;
-using UdonSharp;
+﻿using UdonSharp;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using VRC.SDK3.Data;
 using VRC.SDK3.StringLoading;
 using VRC.SDKBase;
-using VRC.Udon;
 using VRC.Udon.Common.Interfaces;
 using WangQAQ.ED;
-using UnityEngine.TerrainTools;
+using UnityEngine.UI;
 
 namespace WangQAQ.UdonPlug
 {
 	public class GetMainContext : UdonSharpBehaviour
 	{
-		[SerializeField] private TextMeshProUGUI MainContext;
+		[SerializeField] private Text MainContext;
 
 		[SerializeField] public VRCUrl[] urls;
 		[HideInInspector] public byte[] key = null;

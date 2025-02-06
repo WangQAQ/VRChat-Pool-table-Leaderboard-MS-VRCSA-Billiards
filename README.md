@@ -79,4 +79,3 @@
 ![qrcode_1737098291587](https://github.com/user-attachments/assets/ebbfe76c-75b4-4352-b105-5e02ae20ff09)
 > 时间紧凑，双语版的页面在做了 </br>
 > Time was tight, and the bilingual version of the page was done
-

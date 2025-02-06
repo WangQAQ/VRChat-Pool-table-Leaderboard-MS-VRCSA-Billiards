@@ -4819,7 +4819,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Score Board V4AM
+  m_text: Score Board V4B
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 21ac83a342a0b7144a87e1d2c869c740, type: 2}
   m_sharedMaterial: {fileID: -3406411368475958213, guid: 21ac83a342a0b7144a87e1d2c869c740,
@@ -5386,13 +5386,16 @@ MonoBehaviour:
   State: 0
   MessagesState: 0
   MessagesPracticeState: 0
-  NeedUnlockUrl: 0
+  UnlockUrl: 0
   Date: 
   isInvert: 0
   funcStack0: 0
   funcStack1: 0
-  funcStack: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  funcStack2: 0
+  funcStack3: 0
   funcStackTop: 0
+  funcStack: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  funcStackTopLocal: 0
 --- !u!114 &8799685112654531892
 MonoBehaviour:
   m_ObjectHideFlags: 0

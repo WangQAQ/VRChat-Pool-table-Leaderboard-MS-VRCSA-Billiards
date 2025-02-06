@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: LeaderboardV2
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: c56366a6a91e40f4e929bca97c413cca,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 73d63e06696018b4db5b850c63bcef1e,
     type: 2}
   udonAssembly: 
   assemblyError: 

@@ -12,6 +12,8 @@
 #define EIJIS_SEMIAUTOCALL
 #define EIJIS_10BALL
 
+#define WANGQAQ_SkinnedMeshBall
+
 
 // #define EIJIS_DEBUG_INITIALIZERACK
 // #define EIJIS_DEBUG_BALLCHOICE
@@ -44,6 +46,7 @@ using VRC.Udon;
 using System;
 using Metaphira.Modules.CameraOverride;
 using TMPro;
+using WangQAQ.UdonPlug;
 
 [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
 public class BilliardsModule : UdonSharpBehaviour
@@ -283,7 +286,13 @@ public class BilliardsModule : UdonSharpBehaviour
 	[SerializeField] public CueController[] cueControllers;
 
 	// GameObjects
+	[Header("Balls")]
 	[SerializeField] public GameObject[] balls;
+#if WANGQAQ_SkinnedMeshBall
+	[SerializeField] public SkinnedMeshRenderer BaseBall;
+	[SerializeField] public SkinnedMeshRenderer RED15Ball;
+#endif
+	[Space(5)]
 	[SerializeField] public GameObject guideline;
 	[SerializeField] public GameObject guideline2;
 	[SerializeField] public GameObject devhit;
@@ -729,9 +738,8 @@ public class BilliardsModule : UdonSharpBehaviour
 #endif
 #endif
 
-		networkingManager._FlushBuffer();
-
 		_scoreAPI._Tick();
+		networkingManager._FlushBuffer();
 
 		/* 性能计数器 */
 		_EndPerf(PERF_MAIN);
@@ -2641,6 +2649,7 @@ public class BilliardsModule : UdonSharpBehaviour
 	public void _TriggerJumpShotFoul() { jumpShotFoul = true; }
 	public void _TriggerBallFallOffFoul() { fallOffFoul = true; }
 
+	/* 物理模拟结束时调用 */
 	public void _TriggerSimulationEnded(bool forceScratch, bool forceRun = false)
 	{
 		if (!isLocalSimulationRunning && !forceRun) return;
@@ -2724,6 +2733,7 @@ public class BilliardsModule : UdonSharpBehaviour
 			}
 
 #endif
+			 /* 更新规则集状态 */
 			if (is8Ball)
 			{
 				// 8ball rules are based on APA, some rules are not yet implemented.
@@ -3314,6 +3324,7 @@ public class BilliardsModule : UdonSharpBehaviour
             networkingManager._OnSimulationEnded(ballsP, ballsPocketedLocal, fbScoresLocal, colorTurnLocal);
 #endif
 
+			/* 状态跟新 */
 			if (winCondition)
 			{
 				if (foulCondition)
@@ -3387,6 +3398,7 @@ public class BilliardsModule : UdonSharpBehaviour
 		}
 #endif
 	}
+
 	private void sixRedMoveBallUntilNotTouching(int Ball)
 	{
 		//replace colored ball on its own spot
@@ -3737,6 +3749,7 @@ public class BilliardsModule : UdonSharpBehaviour
 		dest.localScale = src.localScale * sf;
 	}
 
+	/* 设置桌子模型（物理） */
 	private void setTableModel(int newTableModel)
 	{
 		tableModels[tableModelLocal].gameObject.SetActive(false);
@@ -3807,7 +3820,7 @@ public class BilliardsModule : UdonSharpBehaviour
 		Vector3 newBallSize = Vector3.one * newscale;
 		for (int i = 0; i < balls.Length; i++)
 		{
-			balls[i].transform.localScale = newBallSize;
+				balls[i].transform.localScale = newBallSize;
 		}
 		float table_base = _GetTableBase().transform.Find(".TABLE_SURFACE").localPosition.y;
 		tableSurface.localPosition = new Vector3(0, table_base + k_BALL_RADIUS, 0);
@@ -3982,6 +3995,8 @@ public class BilliardsModule : UdonSharpBehaviour
 		//预留API，当游戏结束，调用游戏结束事件
 		if (_scoreAPI != null)
 		{
+			/* 清理个人模式置位 */
+			_scoreAPI._SetPracticeMode(false);
 			if (!isPracticeMode)
 			{
 				if (BreakFinish)
@@ -3997,7 +4012,6 @@ public class BilliardsModule : UdonSharpBehaviour
 			}
 			else
 			{
-				_scoreAPI._SetPracticeMode(false);
 				_scoreAPI._GameReset();
 			}
 		}

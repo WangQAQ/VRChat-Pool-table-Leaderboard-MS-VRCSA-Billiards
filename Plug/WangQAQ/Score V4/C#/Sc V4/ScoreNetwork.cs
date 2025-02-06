@@ -11,7 +11,12 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using VRC.SDKBase;
 using VRC.Udon;
+using VRC.Udon.Common;
 using WangQAQ.UdonPlug;
+
+/// <summary>
+///  请注意用户加入那一块的同步冲突问题
+/// </summary>
 
 [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
 public class ScoreNetwork : UdonSharpBehaviour
@@ -34,8 +39,8 @@ public class ScoreNetwork : UdonSharpBehaviour
     [HideInInspector][UdonSynced] public bool MessagesState = false;
 	[HideInInspector][UdonSynced] public bool MessagesPracticeState = false;
 
-	// 上传系统状态量(使用后清除)
-	[HideInInspector][UdonSynced] public bool NeedUnlockUrl = false;
+	// 上传系统状态量 仅限 player change 事件
+	[HideInInspector][UdonSynced] public bool UnlockUrl = false;
 
 	// 上传时同步日期
 	[HideInInspector][UdonSynced] public string Date = "";
@@ -43,19 +48,24 @@ public class ScoreNetwork : UdonSharpBehaviour
     // 反转状态
     [HideInInspector][UdonSynced] public bool isInvert = false;
 
+	/* 同步镜像数据 */
+	#region Mirror
 
-    // 远程调用函数,存储函数ID
-    #region List
-    //VRC 不让我同步数组，我谢谢它的木琴(红温)
-    [HideInInspector][UdonSynced] public byte funcStack0;
+	[HideInInspector][UdonSynced] public byte funcStack0;
     [HideInInspector][UdonSynced] public byte funcStack1;
-    #endregion
-    [HideInInspector] public byte[] funcStack = new byte[2];
+	[HideInInspector][UdonSynced] public byte funcStack2;
+	[HideInInspector][UdonSynced] public byte funcStack3;
+	[HideInInspector][UdonSynced] public int funcStackTop = 0;
+	#endregion
 
-    [HideInInspector][UdonSynced] public int funcStackTop = 0;              //栈顶
+	/* 本地数据 */
+	[HideInInspector] public byte[] funcStack = new byte[4];
+	/* 栈顶 */
+	[HideInInspector][UdonSynced] public int funcStackTopLocal = 0;
 
-    // Status (0 = Synced 1= need sync)
-    private bool bufferStatus = false;
+
+	// Status (0 = Synced 1= need sync)
+	private bool bufferStatus = false;
 
     // DL
     private ScoreManagerV4 _scoreManager;
@@ -88,8 +98,6 @@ public class ScoreNetwork : UdonSharpBehaviour
 
         bufferStatus = false;
 
-        ArrayToBytes();
-
         VRCPlayerApi localPlayer = Networking.LocalPlayer;
         if (!ReferenceEquals(null, localPlayer))
         {
@@ -97,29 +105,53 @@ public class ScoreNetwork : UdonSharpBehaviour
         }
 
         this.RequestSerialization();
-        OnDeserialization();
     }
 
-    public override void OnDeserialization()
+    /* 发送前同步镜像 */
+	public override void OnPreSerialization()
+	{
+        Debug.Log("[SCM] : OnPreSerialization");
+
+		ArrayToBytes();
+        funcStackTop = funcStackTopLocal;
+
+        /* 调用本地接受事件（仅限主机） */
+		OnDeserialization();
+	}
+
+	/* 接受数据 */
+	public override void OnDeserialization()
     {
         BytesToArray();
-        _scoreManager._OnRemoteDeserialization();
+		funcStackTopLocal = funcStackTop;
+
+		_scoreManager._OnRemoteDeserialization();
     }
 
-    #endregion
+	/* 发送失败重传 */
+	public override void OnPostSerialization(SerializationResult result)
+	{
+        if (!result.success)
+        {
+			this.RequestSerialization();
+		}
+	}
 
-    void ArrayToBytes()
+	#endregion
+
+	void ArrayToBytes()
     {
         funcStack0 = funcStack[0];
         funcStack1 = funcStack[1];
-
+		funcStack2 = funcStack[2];
+		funcStack3 = funcStack[3];
 	}
 
     void BytesToArray()
     {
         funcStack[0] = funcStack0;
         funcStack[1] = funcStack1;
+        funcStack[2] = funcStack2;
+        funcStack[3] = funcStack3;
     }
-
-
 }
