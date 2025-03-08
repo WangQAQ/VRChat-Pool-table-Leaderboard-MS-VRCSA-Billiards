@@ -57,9 +57,7 @@ MonoBehaviour:
   _udonSharpBackingUdonBehaviour: {fileID: 7158969639762011427}
   tablehook: {fileID: 0}
   url:
-  - url: https://rank.iplcresonite.xyz/proxy/https://raw.githubusercontent.com/cheesestudio/cheesestudio.github.io/main/PlayerSettings.txt
-  - url: 'https://raw.github.com/cheesestudio/cheesestudio.github.io/main/PlayerSettings.txt '
-  - url: https://raw.kkgithub.com/cheesestudio/cheesestudio.github.io/main/PlayerSettings.txt
+  - url: https://oss.wangqaq.com/storage-file/f35e6c42-6d19-42e8-ba13-1507b3e26cbc
 --- !u!114 &7158969639762011427
 MonoBehaviour:
   m_ObjectHideFlags: 0

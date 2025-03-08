@@ -130,17 +130,28 @@ public class GraphicsManager : UdonSharpBehaviour
 		winnerText_go = winnerText.gameObject;
 
 #if WANGQAQ_SkinnedMeshBall
+		// 处理球体
 		Material[] materials = table.BaseBall.materials;
 		ballMaterial = materials[0];
-		shadowMaterial = materials[1];
 		ballMaterial.name = ballMaterial.name + " for " + table_.gameObject.name;
-		shadowMaterial.name = shadowMaterial.name + " for " + table_.gameObject.name;
 
-		Material[] newMaterials = new Material[] { ballMaterial, shadowMaterial };
+		Material[] newMaterials = new Material[] { ballMaterial };
 
 		/* 设置贴图对象 */
 		table.BaseBall.materials = newMaterials;
 		table.RED15Ball.materials = newMaterials;
+
+		// 处理阴影
+		Material[] shadowMaterials = table.Shadows[0].materials;
+		shadowMaterial = shadowMaterials[0];
+		shadowMaterial.name = shadowMaterial.name + " for " + table_.gameObject.name;
+
+		Material[] newShadowMaterials = new Material[] { ballMaterial };
+
+		foreach (var obj in table.Shadows)
+		{
+			obj.materials = newShadowMaterials;
+		}
 #else
 		Material[] materials = balls[0].GetComponent<MeshRenderer>().materials; // create a new instance for this table
 		ballMaterial = materials[0];
@@ -1429,13 +1440,16 @@ int uniform_cue_colour;
 
 				float height = table._GetTableBase().transform.Find(".TABLE_SURFACE").position.y + 0.0025f;
 				shadowMaterial.SetFloat("_Floor", height);
-#if !WANGQAQ_SkinnedMeshBall
 				shadowMaterial.SetFloat("_Scale", table.k_BALL_RADIUS / 0.03f);//0.03f is the radius of the ball's 3D mesh
-#endif
 			}
 #if WANGQAQ_SkinnedMeshBall
-			table.BaseBall.materials = newMaterials;
-			table.RED15Ball.materials = newMaterials;
+			table.BaseBall.material = newMaterials[0];
+			table.RED15Ball.material = newMaterials[0];
+
+			foreach (var obj in table.Shadows)
+			{
+				obj.material = newMaterials[1];
+			}
 #else
 #if EIJIS_MANY_BALLS
 			for (int i = 0; i < BilliardsModule.MAX_BALLS; i++)

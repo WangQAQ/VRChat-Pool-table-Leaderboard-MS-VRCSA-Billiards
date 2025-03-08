@@ -291,6 +291,7 @@ public class BilliardsModule : UdonSharpBehaviour
 #if WANGQAQ_SkinnedMeshBall
 	[SerializeField] public SkinnedMeshRenderer BaseBall;
 	[SerializeField] public SkinnedMeshRenderer RED15Ball;
+	[SerializeField] public MeshRenderer[] Shadows;
 #endif
 	[Space(5)]
 	[SerializeField] public GameObject guideline;
